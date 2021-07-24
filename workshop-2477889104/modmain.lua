@@ -149,39 +149,45 @@ local colors = {
     GREEN = RGBA(33, 69, 48),
     GREEN_ALT = RGBA(20, 125, 65),
     WHITE = RGBA(180, 180, 180),
-    YELLOW = RGBA(175, 125, 15)
+    YELLOW = RGBA(195, 165, 15)
 }
 
+local clientConfig = GetModConfigData("ClientConfig", true)
+
 local badgeColors = {
-    ORNERY = colors[GetModConfigData("COLOR_DOMESTICATION_ORNERY")],
-    RIDER = colors[GetModConfigData("COLOR_DOMESTICATION_RIDER")],
-    PUDGY = colors[GetModConfigData("COLOR_DOMESTICATION_PUDGY")],
-    DEFAULT = colors[GetModConfigData("COLOR_DOMESTICATION_DEFAULT")],
-    OBEDIENCE = colors[GetModConfigData("COLOR_OBEDIENCE")],
-    TIMER = colors[GetModConfigData("COLOR_TIMER")]
+    ORNERY = colors[GetModConfigData("COLOR_DOMESTICATION_ORNERY", clientConfig)],
+    RIDER = colors[GetModConfigData("COLOR_DOMESTICATION_RIDER", clientConfig)],
+    PUDGY = colors[GetModConfigData("COLOR_DOMESTICATION_PUDGY", clientConfig)],
+    DEFAULT = colors[GetModConfigData("COLOR_DOMESTICATION_DEFAULT", clientConfig)],
+    OBEDIENCE = colors[GetModConfigData("COLOR_OBEDIENCE", clientConfig)],
+    TIMER = colors[GetModConfigData("COLOR_TIMER", clientConfig)]
 }
 
 local offsets = {
     -- Offsets X
-    offsetX = GetModConfigData("OffsetX"),
-    offsetXMult = GetModConfigData("OffsetXMult"),
-    offsetXFine = GetModConfigData("OffsetXFine"),
+    offsetX = GetModConfigData("OffsetX", clientConfig),
+    offsetXMult = GetModConfigData("OffsetXMult", clientConfig),
+    offsetXFine = GetModConfigData("OffsetXFine", clientConfig),
     -- Offsets Y
-    offsetY = GetModConfigData("OffsetY"),
-    offsetYMult = GetModConfigData("OffsetYMult"),
-    offsetYFine = GetModConfigData("OffsetYFine")
+    offsetY = GetModConfigData("OffsetY", clientConfig),
+    offsetYMult = GetModConfigData("OffsetYMult", clientConfig),
+    offsetYFine = GetModConfigData("OffsetYFine", clientConfig)
 }
 
-local scale = GetModConfigData("Scale")
+local scale = GetModConfigData("Scale", clientConfig)
 local scaleOffset = 1 + (scale - 1) / 3
 
 
 local config = {
-    showByDefault = GetModConfigData("ShowByDefault"),
-    enableSounds = GetModConfigData("EnableSounds"),
-    theme = GetModConfigData("Theme"),
-    gapModifier = GetModConfigData("GapModifier"),
-    hungerThreshold = GetModConfigData("HungerThreshold"),
+    showByDefault = GetModConfigData("ShowByDefault", clientConfig),
+    enableSounds = GetModConfigData("EnableSounds", clientConfig),
+
+    theme = GetModConfigData("Theme", clientConfig),
+    hungerThreshold = GetModConfigData("HungerThreshold", clientConfig),
+    healthClearBG = GetModConfigData("HEALTH_BADGE_CLEAR_BG", clientConfig),
+    bgBrightness = GetModConfigData("BADGE_BG_BRIGHTNESS", clientConfig) / 100,
+    bgOpacity = GetModConfigData("BADGE_BG_OPACITY", clientConfig) / 100,
+    gapModifier = GetModConfigData("GapModifier", clientConfig),
     scale = scale,
     colors = colors,
     badgeColors = badgeColors,
@@ -216,7 +222,7 @@ function InventoryBar:Rebuild(...)
 end
 
 
-GLOBAL.TheInput:AddKeyDownHandler(GLOBAL[GetModConfigData("ToggleKey")], function ()
+GLOBAL.TheInput:AddKeyDownHandler(GLOBAL[GetModConfigData("ToggleKey", clientConfig)], function ()
     local activeScreen = GLOBAL.TheFrontEnd:GetActiveScreen()
     if GLOBAL.ThePlayer and activeScreen and activeScreen.name == "HUD" and TheStatusBar and TheStatusBar.mounted then
         if TheStatusBar.isHidden then

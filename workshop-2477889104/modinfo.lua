@@ -1,8 +1,12 @@
 name = "Beefalo Status Bar"
 description = "A status bar for your beefalo mount.\n\n" ..
-"Shows health, domestication and tendency, obedience, ride timer, saddle uses and hunger when riding a beefalo."
+"Shows health, domestication and tendency, obedience, ride timer, saddle uses and hunger when riding a beefalo.\n\n" ..
+"Server configuration is used by default and will apply to all clients on the server. " ..
+"Individual clients can choose to override this and use their own configuration from the client configuration screen.\n\n" ..
+"Server Configuration: Host Game -> World -> Mods\n" ..
+"Client Configuration: Main Menu -> Mods -> Server Mods"
 author = "MNK"
-version = "1.1.0"
+version = "1.2.0"
 forumthread = ""
 
 dont_starve_compatible = false
@@ -33,12 +37,13 @@ local colors = {
     {name = "YELLOW", description = "Yellow"}
 }
 
-local function GenerateCommonOptions(start, count, step, default, prefix)
+local function GenerateCommonOptions(start, count, step, default, prefix, suffix)
     local options = {}
     local current = start
+    local suffix = suffix or ""
     for i = 1, count do
         local prefix = prefix and (current > 0 and "+" or "") or ""
-        options[i] = {description = prefix .. current, data = current}
+        options[i] = {description = prefix .. current .. suffix, data = current}
         if current == default then options[i].hover = "Default" end
         current = current + step
     end
@@ -82,8 +87,8 @@ configuration_options = {
         label = "Show Automatically",
         hover = "Show the status bar automatically when you mount a beefalo.",
         options = {
-            {description = "Yes", data = true, hover = "Default"},
-            {description = "No", data = false}
+            {description = "Enabled", data = true, hover = "Default"},
+            {description = "Disabled", data = false}
         },
         default = true
     },
@@ -95,15 +100,42 @@ configuration_options = {
             {description = "T", data = "KEY_T", hover = "Default"},
             {description = "O", data = "KEY_O"},
             {description = "P", data = "KEY_P"},
-            {description = "G", data = "KEY_G", hover = "Overlaps with the default \"Gesture Wheel\" key."},
+            {description = "G", data = "KEY_G"},
             {description = "H", data = "KEY_H"},
             {description = "Z", data = "KEY_Z"},
             {description = "X", data = "KEY_X"},
-            {description = "C", data = "KEY_C", hover = "Overlaps with a default \"ActionQueue Reborn\" key."},
-            {description = "V", data = "KEY_V", hover = "Overlaps with a default \"Geametric Placement\" key."},
-            {description = "B", data = "KEY_B", hover = "Overlaps with a default \"Geametric Placement\" key."}
+            {description = "C", data = "KEY_C"},
+            {description = "V", data = "KEY_V"},
+            {description = "B", data = "KEY_B"}
         },
         default = "KEY_T"
+    },
+    {
+        name = "EnableSounds",
+        label = "Sounds",
+        hover = "Play a sound when showing or hiding the status bar.",
+        options = {
+            {description = "Disabled", data = false, hover = "Default"},
+            {description = "Enabled", data = true}
+        },
+        default = false
+    },
+    {
+        name = "ClientConfig",
+        label = "Prefer Client Configuration",
+        hover = "When enabled, server configuration will be ignored.\nConfigurations from this screen will be used on every server you join or host.",
+        options = {
+            {description = "Disabled", data = false, hover = "Default"},
+            {description = "Enabled", data = true}
+        },
+        default = false,
+        client = true
+    },
+    {
+        name = "SEPARATOR_BADGE_SETTINGS",
+        label = "Badge Settings",
+        options = {{description = "", data = 1}},
+        default = 1
     },
     {
         name = "Theme",
@@ -118,7 +150,7 @@ configuration_options = {
     {
         name = "Scale",
         label = "Scale",
-        hover = "Adjust the scale (size) of the status bar.",
+        hover = "Controls the scale (size) of the badges.",
         options = {
             {description = "0.5", data = 0.5},
             {description = "0.6", data = 0.6},
@@ -140,28 +172,42 @@ configuration_options = {
         default = 1.0
     },
     {
-        name = "EnableSounds",
-        label = "Sounds",
-        hover = "Play a sound when showing or hiding the status bar.",
-        options = {
-            {description = "Disabled", data = false, hover = "Default"},
-            {description = "Enabled", data = true}
-        },
-        default = false
-    },
-    {
-        name = "GapModifier",
-        label = "Gap Modifier",
-        hover = "Increase of decrease the empty space between the badges.\n Negative values - less space, positive values - more space.",
-        options = GenerateCommonOptions(-15, 46, 1, 0, true),
-        default = 0
-    },
-    {
         name = "HungerThreshold",
         label = "Hunger Badge Threshold",
         hover = "A beefalo needs to have at least this amount of hunger to activate the badge.",
         options = GenerateCommonOptions(5, 30, 5, 10, false),
         default = 10
+    },
+    {
+        name = "HEALTH_BADGE_CLEAR_BG",
+        label = "Health Badge Background",
+        hover = "Distinct: Uses a distinct background. Brightness and opacity will not apply.\nStandard: Uses a standard background. Brightness and opacity will apply.",
+        options = {
+            {description = "Distinct", data = false, hover = "Default"},
+            {description = "Standard", data = true}
+        },
+        default = false
+    },
+    {
+        name = "BADGE_BG_BRIGHTNESS",
+        label = "Background Brightness",
+        hover = "Controls the background brightness of the badges.",
+        options = GenerateCommonOptions(5, 21, 5, 60, false, "%"),
+        default = 60
+    },
+    {
+        name = "BADGE_BG_OPACITY",
+        label = "Background Opacity",
+        hover = "Controls the background opacity (transparency) of the badges.\n100% - No transparency, 0% - Fully transparent.",
+        options = GenerateCommonOptions(0, 21, 5, 100, false, "%"),
+        default = 100
+    },
+    {
+        name = "GapModifier",
+        label = "Gap Modifier",
+        hover = "Controls the empty space between the badges.\n Negative values - less space, positive values - more space.",
+        options = GenerateCommonOptions(-15, 46, 1, 0, true),
+        default = 0
     },
     {
         name = "SEPARATOR_BADGE_COLORS",

@@ -23,23 +23,24 @@ local BeefaloStatusBar = Class(Widget, function(self, owner, config)
     self.badgeGap = self.config.gapModifier + (self.config.theme == "TheForge" and 4 or 0)
     self.badgeWidth = 74 + self.badgeGap
 
+    local commonBadgeConfig = {theme = self.config.theme, brightness = self.config.bgBrightness, opacity = self.config.bgOpacity}
 
-    self.healthBadge = self.root:AddChild(BeefaloBadge(self.config.theme, {174 / 255, 21 / 255, 21 / 255, 1}, "status_health", nil, nil))
+    self.healthBadge = self.root:AddChild(BeefaloBadge(commonBadgeConfig, {174 / 255, 21 / 255, 21 / 255, 1}, "status_health", nil, self.config.healthClearBG))
     self.healthBadge:SetPosition(self.badgeStartPosition, 0)
 
-    self.domesticationBadge = self.root:AddChild(BeefaloBadge(self.config.theme, self.config.badgeColors.ORNERY, nil, nil, true))
+    self.domesticationBadge = self.root:AddChild(BeefaloBadge(commonBadgeConfig, self.config.badgeColors.ORNERY, nil, nil, true))
     self.domesticationBadge:SetPosition(self.badgeStartPosition + self.badgeWidth, 0)
     self.domesticationBadge.icon:SetTexture("minimap/minimap_data.xml", "beefalo_domesticated.png")
 
-    self.obedienceBadge = self.root:AddChild(BeefaloBadge(self.config.theme, self.config.badgeColors.OBEDIENCE, nil, nil, true))
+    self.obedienceBadge = self.root:AddChild(BeefaloBadge(commonBadgeConfig, self.config.badgeColors.OBEDIENCE, nil, nil, true))
     self.obedienceBadge:SetPosition(self.badgeStartPosition + self.badgeWidth * 2, 0)
     self.obedienceBadge.icon:SetTexture(GetInventoryItemAtlas("whip.tex"), "whip.tex")
 
-    self.timerBadge = self.root:AddChild(BeefaloBadge(self.config.theme, self.config.badgeColors.TIMER, nil, true, true))
+    self.timerBadge = self.root:AddChild(BeefaloBadge(commonBadgeConfig, self.config.badgeColors.TIMER, nil, true, true))
     self.timerBadge:SetPosition(self.badgeStartPosition + self.badgeWidth * 3, 0)
     self.timerBadge.icon:SetTexture(GetInventoryItemAtlas("saddle_basic.tex"), "saddle_basic.tex")
 
-    self.hungerBadge = self.root:AddChild(BeefaloBadge(self.config.theme, {200 / 255, 150 / 255, 15 / 255, 1}, "status_hunger", nil, true))
+    self.hungerBadge = self.root:AddChild(BeefaloBadge(commonBadgeConfig, {215 / 255, 165 / 255, 0 / 255, 1}, "status_hunger", nil, true))
     self.hungerBadge:SetPosition(self.badgeStartPosition + self.badgeWidth * 4, -130)
     self.hungerBadge:Hide()
 

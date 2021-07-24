@@ -3,7 +3,7 @@ local UIAnim = require "widgets/uianim"
 local Image = require "widgets/image"
 
 
-local BeefaloBadge = Class(Badge, function(self, theme, tint, iconbuild, circular_meter, use_clear_bg)
+local BeefaloBadge = Class(Badge, function(self, config, tint, iconbuild, circular_meter, use_clear_bg)
     Badge._ctor(self, nil, nil, tint, iconbuild, circular_meter, use_clear_bg)
     
     self:SetScale(0.9)
@@ -11,7 +11,7 @@ local BeefaloBadge = Class(Badge, function(self, theme, tint, iconbuild, circula
     
     self.num:SetScale(0.9)
 
-    if theme == "TheForge" then
+    if config.theme == "TheForge" then
         self.forgeFrame = self.underNumber:AddChild(UIAnim())
         self.forgeFrame:GetAnimState():SetBank("lavaarena_health")
         self.forgeFrame:GetAnimState():SetBuild("lavaarena_health")
@@ -30,7 +30,10 @@ local BeefaloBadge = Class(Badge, function(self, theme, tint, iconbuild, circula
         self.icon:SetScale(0.55)
     end
     
-    if use_clear_bg and self.backing ~= nil then self.backing:GetAnimState():SetMultColour(unpack({135 / 255, 135 / 255, 135 / 255, 1})) end
+    -- It's not really brightness, but it will do.
+    if use_clear_bg and self.backing ~= nil then
+        self.backing:GetAnimState():SetMultColour(unpack({config.brightness, config.brightness, config.brightness, config.opacity}))
+    end
     
 end)
 
